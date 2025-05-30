@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Apresentação - Uma Jornada no Nosso Tempo</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles/pages-styles.css">
+    <style>
+        /* Estilos específicos para a cena de apresentação */
+        #sound-wave-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(0, 0, 0);
+            z-index: 10;
+            overflow: hidden;
+        }
+        
+        #presentation-text {
+            position: absolute;
+            bottom: 20%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            opacity: 0;
+            transition: opacity 2s ease;
+            text-shadow: 0 0 15px rgba(0, 200, 255, 0.8), 0 0 30px rgba(0, 255, 200, 0.4);
+            z-index: 20;
+        }
+        
+        .continue-button {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(0, 230, 255, 0.7);
+            border-radius: 30px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 1s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 20;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.4);
+            text-shadow: 0 0 10px rgba(0, 255, 200, 0.7);
+        }
+        
+        .continue-button:hover {
+            background-color: rgba(0, 230, 255, 0.15);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 230, 255, 0.7), 0 0 30px rgba(0, 255, 200, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos do cursor personalizado -->
+    <div class="cursor"></div>
+    <div class="cursor-trail"></div>
+
+    <!-- Elemento de áudio para a narração -->
+    <audio id="presentation-audio" preload="auto">
+        <source src="../assets/audio/voices/presentation.wav" type="audio/wav">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+    
+    <!-- Elementos de áudio para os sons dos botões -->
+    <audio id="hover-sound" preload="auto">
+        <source src="../assets/audio/hover.wav" type="audio/wav">
+    </audio>
+    <audio id="click-sound" preload="auto">
+        <source src="../assets/audio/clicked.wav" type="audio/wav">
+    </audio>
+
+    <div id="game-container">
+        <div id="sound-wave-container">
+            <!-- O canvas do círculo pulsante será inserido aqui pelo JavaScript -->
+        </div>
+        
+        <div id="presentation-text">
+            Bem-vindo à nossa jornada através do tempo
+        </div>
+        
+        <button id="continue-button" class="continue-button" style="display: none;">
+            Continuar
+        </button>
+    </div>
+
+    <script src="../cursor-effects.js"></script>
+    <script src="../sound-wave-animation.js"></script>
+    <script src="../game.js"></script>
+    <script>
+        // Inicializar a cena de apresentação
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar a animação de ondas sonoras
+            const soundWave = new SoundWaveAnimation('sound-wave-container');
+            
+            // Conectar o áudio à animação
+            soundWave.connectAudio('presentation-audio');
+            
+            // Reproduzir o áudio após um pequeno atraso
+            setTimeout(() => {
+                soundWave.playAudio();
+                
+                // Mostrar o texto após o início do áudio
+                setTimeout(() => {
+                    const presentationText = document.getElementById('presentation-text');
+                    presentationText.style.opacity = '1';
+                }, 2000);
+                
+                // Mostrar o botão de continuar após o áudio terminar
+                const audioElement = document.getElementById('presentation-audio');
+                audioElement.onended = function() {
+                    const continueButton = document.getElementById('continue-button');
+                    continueButton.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        continueButton.style.opacity = '1';
+                    }, 100);
+                };
+            }, 1000);
+            
+            // Configurar o botão de continuar
+            const continueButton = document.getElementById('continue-button');
+            continueButton.addEventListener('click', function() {
+                // Parar a animação e redirecionar para a próxima cena
+                soundWave.stop();
+                window.location.href = 'forest-scene.html';
+            });
+            
+            // Aplicar sons ao botão de continuar
+            const hoverSound = document.getElementById('hover-sound');
+            const clickSound = document.getElementById('click-sound');
+            
+            continueButton.addEventListener('mouseenter', function() {
+                hoverSound.currentTime = 0;
+                hoverSound.play().catch(e => console.log('Erro ao reproduzir som de hover:', e));
+            });
+            
+            continueButton.addEventListener('click', function() {
+                clickSound.currentTime = 0;
+                clickSound.play().catch(e => console.log('Erro ao reproduzir som de clique:', e));
+            });
+        });
+    </script>
+</body>
+</html> 
