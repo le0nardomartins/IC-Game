@@ -57,10 +57,11 @@ class SoundWaveAnimation {
         for (let i = 0; i < count; i++) {
             this.waves.push({
                 radius: 0,
-                maxRadius: Math.min(this.canvas.width, this.canvas.height) * 0.6,
+                maxRadius: 80, // Aumentado de 50 para 80
                 alpha: 1,
-                speed: 1 + Math.random() * 0.5,
-                thickness: 2 + Math.random() * 4
+                speed: 1.5 + Math.random() * 1, // Aumentada a velocidade base e variação
+                thickness: 2 + Math.random() * 6, // Aumentada a variação de espessura
+                pulseSpeed: 0.5 + Math.random() * 0.5 // Nova propriedade para pulsar
             });
         }
     }
@@ -72,24 +73,23 @@ class SoundWaveAnimation {
         const radius = Math.min(this.canvas.width, this.canvas.height) * 0.4;
         
         for (let i = 0; i < count; i++) {
-            // Posição aleatória em torno do centro (em formato de anel)
             const angle = Math.random() * Math.PI * 2;
             const distance = (Math.random() * 0.5 + 0.3) * radius;
             
             this.particles.push({
                 x: centerX + Math.cos(angle) * distance,
                 y: centerY + Math.sin(angle) * distance,
-                size: 1 + Math.random() * 3,
-                speedX: (Math.random() - 0.5) * 1.5,
-                speedY: (Math.random() - 0.5) * 1.5,
+                size: 2 + Math.random() * 4, // Aumentado o tamanho das partículas
+                speedX: (Math.random() - 0.5) * 2.5, // Aumentada a velocidade
+                speedY: (Math.random() - 0.5) * 2.5, // Aumentada a velocidade
                 color: Math.random() > 0.5 ? this.startColor : this.endColor,
-                opacity: 0.3 + Math.random() * 0.7,
+                opacity: 0.4 + Math.random() * 0.6,
                 angle: Math.random() * Math.PI * 2,
-                angleSpeed: (Math.random() - 0.5) * 0.02,
+                angleSpeed: (Math.random() - 0.5) * 0.04, // Aumentada a velocidade de rotação
                 distance: distance,
-                distanceSpeed: (Math.random() - 0.5) * 0.8,
+                distanceSpeed: (Math.random() - 0.5) * 1.2, // Aumentada a velocidade de distância
                 orbitRadius: distance,
-                orbitSpeed: (Math.random() - 0.5) * 0.01
+                orbitSpeed: (Math.random() - 0.5) * 0.02 // Aumentada a velocidade orbital
             });
         }
     }
@@ -156,7 +156,7 @@ class SoundWaveAnimation {
         // Desenhar brilho de fundo geral
         const backgroundGlow = this.ctx.createRadialGradient(
             centerX, centerY, 0,
-            centerX, centerY, Math.min(this.canvas.width, this.canvas.height) * 0.6
+            centerX, centerY, Math.min(this.canvas.width, this.canvas.height) * 0.3
         );
         
         const pulseIntensity = 0.5 + 0.3 * Math.sin(this.time * 1.5);
@@ -173,7 +173,7 @@ class SoundWaveAnimation {
         // Desenhar brilho central mais intenso
         const coreGlow = this.ctx.createRadialGradient(
             centerX, centerY, 0,
-            centerX, centerY, 100 + Math.sin(this.time * 2) * 20
+            centerX, centerY, 80 + Math.sin(this.time * 2) * 15 // Aumentado o raio e a variação
         );
         
         const coreIntensity = 0.7 + 0.3 * Math.sin(this.time * 2);
@@ -188,7 +188,7 @@ class SoundWaveAnimation {
         this.ctx.fill();
         
         // Desenhar núcleo central brilhante
-        const innerRadius = 30 + Math.sin(this.time * 3) * 8;
+        const innerRadius = 25 + Math.sin(this.time * 3) * 8; // Aumentado o raio base e a variação
         const coreGradient = this.ctx.createRadialGradient(
             centerX, centerY, 0,
             centerX, centerY, innerRadius
@@ -212,28 +212,28 @@ class SoundWaveAnimation {
             if (wave.radius < wave.maxRadius) {
                 allWavesExpired = false;
                 
-                // Atualizar raio e opacidade
-                wave.radius += wave.speed;
+                // Atualizar raio e opacidade com pulsação
+                wave.radius += wave.speed * (1 + Math.sin(this.time * wave.pulseSpeed) * 0.3);
                 wave.alpha = 0.8 * (1 - (wave.radius / wave.maxRadius));
                 
-                // Calcular cor baseada no progresso
-                const waveColorRatio = 0.3 + 0.7 * (wave.radius / wave.maxRadius);
+                // Calcular cor baseada no progresso com variação
+                const waveColorRatio = 0.3 + 0.7 * (wave.radius / wave.maxRadius) + Math.sin(this.time * 2) * 0.1;
                 const waveColor = this.interpolateColor(waveColorRatio);
                 
-                // Desenhar onda com efeito de brilho
+                // Desenhar onda com efeito de brilho melhorado
                 this.ctx.beginPath();
                 this.ctx.arc(centerX, centerY, wave.radius, 0, Math.PI * 2);
                 this.ctx.strokeStyle = `rgba(${waveColor.r}, ${waveColor.g}, ${waveColor.b}, ${wave.alpha})`;
-                this.ctx.lineWidth = wave.thickness;
-                this.ctx.filter = 'blur(2px)';
+                this.ctx.lineWidth = wave.thickness * (1 + Math.sin(this.time * 3) * 0.2);
+                this.ctx.filter = 'blur(3px)'; // Aumentado o blur
                 this.ctx.stroke();
                 this.ctx.filter = 'none';
             }
         }
         
-        // Criar novas ondas se todas expiraram ou aleatoriamente
-        if (allWavesExpired || Math.random() < 0.02) {
-            this.createWaves(1 + Math.floor(Math.random() * 2));
+        // Criar novas ondas mais frequentemente
+        if (allWavesExpired || Math.random() < 0.03) { // Aumentada a chance de criar novas ondas
+            this.createWaves(1 + Math.floor(Math.random() * 3)); // Possibilidade de criar mais ondas
         }
         
         // Atualizar e desenhar partículas

@@ -26,10 +26,3 @@ Thumbs.db
 
 # Electron specific
 *.log
-
-# Arquivos pesados
-assets/videos/
-*.mp4
-*.mp3
-*.avi
-*.mkv

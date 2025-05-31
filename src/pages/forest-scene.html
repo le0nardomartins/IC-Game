@@ -6,6 +6,20 @@
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="styles/pages-styles.css">
     <style>
+        /* Regras globais para ocultar o cursor */
+        html, body, button, a, input, select, textarea, [role="button"] {
+            cursor: none !important;
+        }
+
+        * {
+            cursor: none !important;
+        }
+
+        /* Garantir que o cursor personalizado fique sempre visível */
+        .cursor, .cursor-trail {
+            pointer-events: none;
+        }
+        
         /* Definição da fonte Dune Rise diretamente na página para garantir compatibilidade */
         @font-face {
             font-family: 'Dune Rise';
@@ -56,7 +70,7 @@
             border-radius: 30px;
             font-family: 'Outfit', sans-serif;
             font-size: 1.1rem;
-            cursor: pointer;
+            cursor: none;
             transition: all 0.3s ease;
             box-shadow: 0 0 15px rgba(0, 200, 255, 0.4);
             text-shadow: 0 0 10px rgba(0, 255, 200, 0.7);
@@ -134,15 +148,16 @@
             
             // Configura ações para os botões
             choice1Button.onclick = function() {
-                // Reproduzir som de clique manualmente
+                // Reproduzir som de clique
                 const clickSound = document.getElementById('click-sound');
                 if (clickSound) {
                     clickSound.currentTime = 0;
                     clickSound.play().catch(e => console.log('Erro ao reproduzir som de clique:', e));
                 }
                 
+                // Redirecionar para a cena da seca
                 setTimeout(() => {
-                    alert('Você escolheu explorar o caminho da esquerda! (Esta funcionalidade será implementada em breve)');
+                    window.location.href = 'seca-scene.html';
                 }, 100);
             };
             

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créditos - Jornada no Tempo</title>
+    <style>
+        /* Regras globais para ocultar o cursor */
+        html, body, button, a, input, select, textarea, [role="button"] {
+            cursor: none !important;
+        }
+
+        * {
+            cursor: none !important;
+        }
+
+        /* Garantir que o cursor personalizado fique sempre visível */
+        .cursor, .cursor-trail {
+            pointer-events: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #030508;
+            color: #ecf0f1;
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #credits-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        #credits-content {
+            position: absolute;
+            bottom: -100%;
+            animation: scrollCredits 30s linear forwards;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes scrollCredits {
+            0% {
+                bottom: -100%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+            }
+        }
+
+        .credit-section {
+            margin: 40px 0;
+        }
+
+        .credit-title {
+            font-size: 2.5em;
+            color: #2ecc71;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+            margin-bottom: 20px;
+            font-family: 'Dune Rise', sans-serif;
+        }
+
+        .credit-name {
+            font-size: 1.8em;
+            color: #3498db;
+            margin: 10px 0;
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        .credit-role {
+            font-size: 1.2em;
+            color: #ecf0f1;
+            margin-bottom: 30px;
+        }
+
+        #sound-wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #return-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: transparent;
+            color: #ecf0f1;
+            border: 2px solid #2ecc71;
+            border-radius: 30px;
+            cursor: none;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: showButton 2s ease 25s forwards;
+        }
+
+        #return-button:hover {
+            background: rgba(46, 204, 113, 0.2);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+        }
+
+        @keyframes showButton {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-trail"></div>
+
+    <audio id="credits-audio" preload="auto">
+        <source src="../assets/audio/credits.wav" type="audio/wav">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <div id="credits-container">
+        <div id="sound-wave-container"></div>
+        
+        <div id="credits-content">
+            <div class="credit-section">
+                <div class="credit-title">Jornada no Tempo</div>
+                <div class="credit-role">Uma Experiência Interativa</div>
+            </div>
+
+            <div class="credit-section">
+                <div class="credit-title">Desenvolvimento</div>
+                <div class="credit-name">Equipe de Desenvolvimento</div>
+                <div class="credit-role">Programação e Design</div>
+            </div>
+
+            <div class="credit-section">
+                <div class="credit-title">Arte e Animação</div>
+                <div class="credit-name">Artistas Visuais</div>
+                <div class="credit-role">Design Visual e Animações</div>
+            </div>
+
+            <div class="credit-section">
+                <div class="credit-title">Música e Som</div>
+                <div class="credit-name">Compositores</div>
+                <div class="credit-role">Trilha Sonora Original</div>
+            </div>
+
+            <div class="credit-section">
+                <div class="credit-title">Agradecimentos Especiais</div>
+                <div class="credit-name">A todos que tornaram este projeto possível</div>
+                <div class="credit-role">Obrigado por fazer parte desta jornada</div>
+            </div>
+        </div>
+
+        <button id="return-button">Voltar ao Início</button>
+    </div>
+
+    <script src="../sound-wave-animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar animação de onda sonora
+            const soundWave = new SoundWaveAnimation('sound-wave-container');
+            
+            // Conectar e reproduzir áudio
+            soundWave.connectAudio('credits-audio');
+            const audioElement = document.getElementById('credits-audio');
+            audioElement.play();
+
+            // Configurar botão de retorno
+            const returnButton = document.getElementById('return-button');
+            returnButton.addEventListener('click', () => {
+                window.location.href = 'menu-screen.html';
+            });
+        });
+    </script>
+</body>
+</html> 
